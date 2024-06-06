@@ -29,6 +29,7 @@
   import Featured from '@/components/Featured.vue'
   import History from '@/components/History.vue'
   import audio from '@/services/audio'
+  import speech from '@/services/speech'
 
   export default {
     name: 'Default',
@@ -61,7 +62,25 @@
     },
     methods: {
       playAudio () {
+        const lang = this.config.locale || 'pt-BR'
+        let description = this.$store.getters.message.description
+        let title = this.$store.getters.message.title
+        let subtitle = this.$store.getters.message.subtitle
+
+        if (!this.$store.state.config.speechLocal) {
+          subtitle = ''
+        }
+
         audio.playAlert(this.config.alert)
+        if (this.$store.state.config.speechEnable) {
+          setTimeout(() => speech.speechAll([
+            'Senha',
+            description,
+            title,
+            subtitle
+          ], lang), 2000)
+        } else {
+        }
       }
     }
   }

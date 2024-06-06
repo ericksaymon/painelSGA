@@ -350,23 +350,35 @@
               </a>
             </div>
           </div>
-          <!--
+          <div class="field">
+           <label class="label">
+              {{ 'settings.label.speech'|trans }}
+            </label>
+            <div class="control has-addons">
+              <label class="checkbox">
+                 <input type="checkbox" v-model="config.speechEnable">
+                {{ 'settings.label.speech_enabled'|trans }}
+              </label>
+              </div>
+          </div>
           <div class="field">
             <div class="control has-addons">
               <label class="checkbox">
-                <input type="checkbox" v-model="config.services">
-                {{ 'settings.label.speech_enabled'|trans }}
+                <input type="checkbox" v-model="config.speechLocal" :disabled="!this.config.speechEnable">
+                {{ 'settings.label.speech_local'|trans }}
               </label>
-              <a class="button" title="Play">
+            </div>
+          </div>
+          <span class="button" :disabled="!this.config.speechEnable" >
+            Normal: A001 / Guichê: 1
+            &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+          <a style="color: inherit" title="Play">
                 <span class="icon is-small" @click.prevent="testSpeech">
                   <i class="fa fa-play"></i>
                 </span>
               </a>
-            </div>
-          </div>
-          -->
+            </span>
           <hr>
-
           <div class="field is-grouped is-grouped-right">
             <div class="control">
               <button type="submit" class="button is-primary is-large">
@@ -528,13 +540,17 @@
       },
       testSpeech () {
         const lang = this.config.locale || 'pt-BR'
+        let subtitle = 'Guichê 1'
         log('Testing speech lang', lang)
 
+        if (!this.config.speechLocal) {
+          subtitle = ''
+        }
+
         speech.speechAll([
-          'Senha',
-          '21',
-          'mesa',
-          '5'
+          'Normal',
+          'A001',
+          subtitle
         ], lang).then(() => {
           log('Testing end')
         }, (e) => {
