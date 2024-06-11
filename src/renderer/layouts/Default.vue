@@ -115,7 +115,7 @@
         height: 20vh
         padding: 5vh
         img
-          height: 10vh
+          height: 15vh
       .featured-message
         text-align: center
         .title
